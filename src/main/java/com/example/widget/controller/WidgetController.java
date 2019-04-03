@@ -29,14 +29,13 @@ public class WidgetController {
     @ResponseStatus(HttpStatus.OK)
     public List<WidgetResponse> getWidgets(@RequestParam(value = "start", required = false, defaultValue = "0") int start,
                                            @RequestParam(value = "limit", required = false, defaultValue = "0") int limit) {
-
-        List<WidgetResponse> trimmedResponseList;
-        if (limit == 0) { //return all items in this case
-            trimmedResponseList = this.widgetService.findAll();
+        
+        if (limit == 0) {
+            limit = this.widgetService.findAll().size();
         } else {
-            trimmedResponseList = new ArrayList<WidgetResponse>(this.widgetService.findAll().subList(start, start + limit));
+            limit += start
         }
-
-        return trimmedResponseList;
+        
+        return new ArrayList<WidgetResponse>(this.widgetService.findAll().subList(start, limit));        
     }
 }
